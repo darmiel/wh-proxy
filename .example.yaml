@@ -1,19 +1,21 @@
 name: "Test Webhook"
 
 expect:
-  Camera:
-    Avatar: string
-    Name: string
-    ID: string
-
-cond: "{{ .Camera.Name == 'Test' }}"
-break: false
-
-response:
-  type: json
+  method: POST
+  type: JSON
   data:
+    Camera:
+      Avatar: string
+      Name: string
+      ID: string
+
+cond: "{{ .Camera.Name }} == 'Test'"
+break-on-run: false
+
+data:
+  discord1:
     content: "Hello World!"
-    username: "Notify for {{ .Camera.Avatar }}"
+    username: "Notify for {{ .Camera.Name }}"
     avatar_url: "{{ .Camera.Avatar }}"
     embeds:
       - title: "Live Stream"
@@ -30,3 +32,31 @@ response:
         author:
           name: "{{ .Camera.Name }}@{{ .Camera.ID }}"
           icon_url: "{{ .Camera.Avatar }}"
+  slack2:
+    content: "Hello World from {{ .Camera.Name }}!"
+    name: "Notify for {{ .Camera.Name }}"
+    avatar: "{{ .Camera.Avatar }}"
+
+response:
+  - type: JSON
+    url: "https://discord.com/my_webhook"
+    method: POST
+    expect-status: 200
+    continue-on-error: true
+    data: @discord1
+
+  - type: XML
+    url: "https://slack.com/my_other_xml_webhook"
+    method: POST
+    expect-status: 200
+    continue-on-error: true
+    data: |
+      <content>Hi from {{ .Camera.Name }}</content>
+      <name>{{ .Camera.Name }}@{{ .Camera.ID }}</name>
+
+  - type: JSON
+    url: "https://slack.com/my_other_json_webhook"
+    method: POST
+    expect-status: 200
+    continue-on-error: true
+    data: @slack2
