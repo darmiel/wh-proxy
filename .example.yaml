@@ -1,0 +1,32 @@
+name: "Test Webhook"
+
+expect:
+  Camera:
+    Avatar: string
+    Name: string
+    ID: string
+
+cond: "{{ .Camera.Name == 'Test' }}"
+break: false
+
+response:
+  type: json
+  data:
+    content: "Hello World!"
+    username: "Notify for {{ .Camera.Avatar }}"
+    avatar_url: "{{ .Camera.Avatar }}"
+    embeds:
+      - title: "Live Stream"
+        description: "Detected motion on camera {{ .Camera.Name }}"
+        color: 16725044
+        url: "{{ .Camera.Stream }}"
+        fields:
+          - name: "Name"
+            value: "{{ .Camera.ID }}"
+            inline: true
+          - name: "ID"
+            value: "{{ .Camera.Stream }}"
+            inline: false
+        author:
+          name: "{{ .Camera.Name }}@{{ .Camera.ID }}"
+          icon_url: "{{ .Camera.Avatar }}"
