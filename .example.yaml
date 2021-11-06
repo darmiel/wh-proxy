@@ -1,15 +1,12 @@
+id: webhook-1
 name: "Test Webhook"
 
 expect:
-  method: POST
-  type: JSON
-  data:
-    Camera:
-      Avatar: string
-      Name: string
-      ID: string
+  method: [POST, GET]
+  type: [JSON]
+  # TODO: implement
+  # cond: "{{ .Camera.Name }} == 'Test'"
 
-cond: "{{ .Camera.Name }} == 'Test'"
 break-on-run: false
 
 data:
@@ -50,9 +47,20 @@ response:
     method: POST
     expect-status: 200
     continue-on-error: true
+    headers:
+      Authorization: "Bearer eyAAAA=="
     data: |
       <content>Hi from {{ .Camera.Name }}</content>
       <name>{{ .Camera.Name }}@{{ .Camera.ID }}</name>
+
+  - type: XML
+    url: "https://slack.com/my_other_xml_webhook"
+    method: POST
+    expect-status: 200
+    continue-on-error: true
+    data:
+      content: "Hi from {{ .Camera.Name }}"
+      name: "{{ .Camera.Name }}@{{ .Camera.ID }}"
 
   - type: JSON
     url: "https://slack.com/my_other_json_webhook"

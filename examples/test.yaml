@@ -1,0 +1,7 @@
+id: test
+
+response:
+  - type: JSON
+    url: "https://hookb.in/PxY2bZOEoeUpKPrrKXM6"
+    method: POST
+    data: "Hello World!"
