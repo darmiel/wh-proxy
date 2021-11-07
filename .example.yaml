@@ -4,8 +4,7 @@ name: "Test Webhook"
 expect:
   method: [POST, GET]
   type: [JSON]
-  # TODO: implement
-  # cond: "{{ .Camera.Name }} == 'Test'"
+  cond: "{{ .Camera.Name }} == 'Test'"
 
 break-on-run: false
 
@@ -44,6 +43,7 @@ response:
 
   - type: XML
     url: "https://slack.com/my_other_xml_webhook"
+    id: slack-xml
     method: POST
     expect-status: 200
     continue-on-error: true
@@ -60,7 +60,7 @@ response:
     continue-on-error: true
     data:
       content: "Hi from {{ .Camera.Name }}"
-      name: "{{ .Camera.Name }}@{{ .Camera.ID }}"
+      name: "{{ .Camera.Name }}@{{ .Camera.ID }} last status: {{ #.slack-xml.response.status-code }}"
 
   - type: JSON
     url: "https://slack.com/my_other_json_webhook"

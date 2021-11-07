@@ -7,6 +7,7 @@ import (
 )
 
 type R struct {
+	ID              string            `yaml:"id"`
 	Type            string            `yaml:"type"`
 	URL             string            `yaml:"url"`
 	Method          string            `yaml:"method"`
@@ -32,7 +33,7 @@ type A struct {
 	BreakOnRun bool `yaml:"break-on-run"`
 	//
 	Data     map[string]interface{} `yaml:"data"`
-	Response []R                   `yaml:"response"`
+	Response []R                    `yaml:"response"`
 }
 
 type Ferror string
